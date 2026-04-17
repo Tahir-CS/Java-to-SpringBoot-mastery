@@ -14,9 +14,9 @@
     </parent>
 
     <groupId>com.tahir</groupId>
-    <artifactId>springboot-first-usage</artifactId>
+    <artifactId>springboot-project</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>springboot-first-usage</name>
+    <name>springboot project</name>
     <description>Beginner first Spring Boot setup with comments</description>
 
     <properties>

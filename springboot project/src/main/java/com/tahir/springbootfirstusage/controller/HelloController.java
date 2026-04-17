@@ -24,7 +24,7 @@ public class HelloController {
     public Map<String, String> health() {
         Map<String, String> response = new HashMap<>();
         response.put("status", "UP");
-        response.put("service", "springboot-first-usage");
+        response.put("service", "springboot project");
         return response;
     }
 }
