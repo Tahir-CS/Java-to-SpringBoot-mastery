@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpringBoot Project Dashboard</title>
+
+    <!-- Expressive fonts for a distinct look. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<!-- Decorative background layers for atmosphere. -->
+<div class="bg-orb orb-a" aria-hidden="true"></div>
+<div class="bg-orb orb-b" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="topbar reveal" style="--delay: 0.05s;">
+    <div class="brand-wrap">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <div>
+            <p class="eyebrow">Milestone 5 Practice</p>
+            <h1>SpringBoot Project</h1>
+        </div>
+    </div>
+    <button id="refreshBtn" class="btn btn-ghost" type="button">Refresh Data</button>
+</header>
+
+<main class="layout">
+    <!-- Intro section explains what this page is doing for beginners. -->
+    <section class="panel intro reveal" style="--delay: 0.12s;">
+        <h2>Your First Frontend for Spring Boot API</h2>
+        <p>
+            This page calls your backend endpoints, creates students, lists students, and deletes students.
+            Everything here is basic and beginner-friendly, but structured like a real small project.
+        </p>
+        <div class="quick-links">
+            <a href="/api/hello" target="_blank" rel="noopener noreferrer">Open /api/hello</a>
+            <a href="/api/health" target="_blank" rel="noopener noreferrer">Open /api/health</a>
+            <a href="/api/students" target="_blank" rel="noopener noreferrer">Open /api/students</a>
+        </div>
+    </section>
+
+    <!-- Stats cards show basic API information at a glance. -->
+    <section class="stats-grid">
+        <article class="stat-card reveal" style="--delay: 0.18s;">
+            <p class="card-label">API Health</p>
+            <p id="healthStatus" class="status-pill pending">Checking...</p>
+        </article>
+        <article class="stat-card reveal" style="--delay: 0.24s;">
+            <p class="card-label">Students Count</p>
+            <p id="studentCount" class="stat-value">0</p>
+        </article>
+        <article class="stat-card reveal" style="--delay: 0.30s;">
+            <p class="card-label">Last Updated</p>
+            <p id="lastUpdated" class="stat-value small">Not yet</p>
+        </article>
+    </section>
+
+    <section class="main-grid">
+        <!-- Form panel for creating students. -->
+        <article class="panel reveal" style="--delay: 0.36s;">
+            <h2>Add Student</h2>
+            <p class="muted-text">Fill name and email, then click save.</p>
+
+            <form id="studentForm" class="student-form">
+                <label for="nameInput">Name</label>
+                <input id="nameInput" name="name" type="text" placeholder="Ali Hassan" required>
+
+                <label for="emailInput">Email</label>
+                <input id="emailInput" name="email" type="email" placeholder="ali@university.edu" required>
+
+                <button id="submitBtn" class="btn btn-primary" type="submit">Save Student</button>
+            </form>
+        </article>
+
+        <!-- List panel for reading and deleting students. -->
+        <article class="panel reveal" style="--delay: 0.42s;">
+            <div class="list-head">
+                <h2>Student List</h2>
+                <input id="searchInput" type="search" placeholder="Search by name or email">
+            </div>
+
+            <div id="studentList" class="student-list">
+                <p class="empty-state">Loading students...</p>
+            </div>
+        </article>
+    </section>
+</main>
+
+<!-- Toast gives user feedback for create/delete/errors. -->
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="/app.js"></script>
+</body>
+</html>
