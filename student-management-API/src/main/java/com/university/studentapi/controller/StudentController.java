@@ -1,7 +1,9 @@
 package com.university.studentapi.controller;
 
-import com.university.studentapi.entity.Student;
+import com.university.studentapi.dto.StudentRequest;
+import com.university.studentapi.dto.StudentResponse;
 import com.university.studentapi.service.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,7 +38,7 @@ public class StudentController {
      * Returns all students.
      */
     @GetMapping
-    public List<Student> getAllStudents() {
+    public List<StudentResponse> getAllStudents() {
         return studentService.getAllStudents();
     }
 
@@ -45,7 +47,7 @@ public class StudentController {
      * Returns one student by ID.
      */
     @GetMapping("/{id}")
-    public Student getStudentById(@PathVariable Long id) {
+    public StudentResponse getStudentById(@PathVariable Long id) {
         return studentService.getStudentById(id);
     }
 
@@ -54,8 +56,8 @@ public class StudentController {
      * Creates a new student.
      */
     @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
-        Student createdStudent = studentService.createStudent(student);
+    public ResponseEntity<StudentResponse> createStudent(@Valid @RequestBody StudentRequest studentRequest) {
+        StudentResponse createdStudent = studentService.createStudent(studentRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdStudent);
     }
 
@@ -64,8 +66,8 @@ public class StudentController {
      * Updates an existing student.
      */
     @PutMapping("/{id}")
-    public Student updateStudent(@PathVariable Long id, @RequestBody Student student) {
-        return studentService.updateStudent(id, student);
+    public StudentResponse updateStudent(@PathVariable Long id, @Valid @RequestBody StudentRequest studentRequest) {
+        return studentService.updateStudent(id, studentRequest);
     }
 
     /**
