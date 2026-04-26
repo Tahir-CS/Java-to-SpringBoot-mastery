@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -49,6 +50,37 @@ public class StudentController {
     @GetMapping("/{id}")
     public StudentResponse getStudentById(@PathVariable Long id) {
         return studentService.getStudentById(id);
+    }
+
+    /**
+     * GET /api/students/search?name=ali
+     * Partial, case-insensitive search by name.
+     */
+    @GetMapping("/search")
+    public List<StudentResponse> searchByName(@RequestParam String name) {
+        return studentService.searchByName(name);
+    }
+
+    /**
+     * GET /api/students/semester/3
+     * Returns students from semester 3 and above.
+     */
+    @GetMapping("/semester/{min}")
+    public List<StudentResponse> getFromSemester(@PathVariable int min) {
+        return studentService.getStudentsFromSemester(min);
+    }
+
+    /**
+     * GET /api/students/major/Computer%20Science/range?from=2&to=6
+     * Combined filter endpoint.
+     */
+    @GetMapping("/major/{major}/range")
+    public List<StudentResponse> getByMajorAndRange(
+            @PathVariable String major,
+            @RequestParam int from,
+            @RequestParam int to
+    ) {
+        return studentService.getByMajorAndSemesterRange(major, from, to);
     }
 
     /**

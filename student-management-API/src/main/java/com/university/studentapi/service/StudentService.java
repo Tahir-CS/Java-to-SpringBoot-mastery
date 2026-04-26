@@ -7,6 +7,7 @@ import com.university.studentapi.exception.DuplicateEmailException;
 import com.university.studentapi.exception.StudentNotFoundException;
 import com.university.studentapi.repository.StudentRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -38,6 +39,10 @@ public class StudentService {
         );
     }
 
+    /**
+     * Read-only transaction is cheaper than a read-write one.
+     */
+    @Transactional(readOnly = true)
     public List<StudentResponse> getAllStudents() {
         return studentRepository.findAll()
                 .stream()
@@ -45,12 +50,14 @@ public class StudentService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public StudentResponse getStudentById(Long id) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException(id));
         return toResponse(student);
     }
 
+    @Transactional
     public StudentResponse createStudent(StudentRequest request) {
         if (studentRepository.findByEmail(request.email()).isPresent()) {
             throw new DuplicateEmailException(request.email());
@@ -68,6 +75,7 @@ public class StudentService {
         return toResponse(saved);
     }
 
+    @Transactional
     public StudentResponse updateStudent(Long id, StudentRequest request) {
         Student existing = studentRepository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException(id));
@@ -88,10 +96,44 @@ public class StudentService {
         return toResponse(updated);
     }
 
+    @Transactional
     public void deleteStudent(Long id) {
         if (!studentRepository.existsById(id)) {
             throw new StudentNotFoundException(id);
         }
         studentRepository.deleteById(id);
+    }
+
+    /**
+     * Search students by a partial name, case-insensitive.
+     */
+    @Transactional(readOnly = true)
+    public List<StudentResponse> searchByName(String namePart) {
+        return studentRepository.findByNameContainingIgnoreCase(namePart)
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    /**
+     * Returns students whose semester is greater than or equal to the given value.
+     */
+    @Transactional(readOnly = true)
+    public List<StudentResponse> getStudentsFromSemester(int semester) {
+        return studentRepository.findFromSemesterOnwards(semester)
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    /**
+     * Combined filter: major + semester range.
+     */
+    @Transactional(readOnly = true)
+    public List<StudentResponse> getByMajorAndSemesterRange(String major, int from, int to) {
+        return studentRepository.findByMajorAndSemesterRange(major, from, to)
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 }
