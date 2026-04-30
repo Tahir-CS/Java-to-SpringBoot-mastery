@@ -1,0 +1,11 @@
+C:\Users\Tahir\Desktop\Java - Copy\student-management-API\src\main\java\com\university\studentapi\exception\DuplicateEmailException.java
+C:\Users\Tahir\Desktop\Java - Copy\student-management-API\src\main\java\com\university\studentapi\entity\Student.java
+C:\Users\Tahir\Desktop\Java - Copy\student-management-API\src\main\java\com\university\studentapi\dto\StudentResponse.java
+C:\Users\Tahir\Desktop\Java - Copy\student-management-API\src\main\java\com\university\studentapi\exception\GlobalExceptionHandler.java
+C:\Users\Tahir\Desktop\Java - Copy\student-management-API\src\main\java\com\university\studentapi\exception\ErrorResponse.java
+C:\Users\Tahir\Desktop\Java - Copy\student-management-API\src\main\java\com\university\studentapi\exception\StudentNotFoundException.java
+C:\Users\Tahir\Desktop\Java - Copy\student-management-API\src\main\java\com\university\studentapi\repository\StudentRepository.java
+C:\Users\Tahir\Desktop\Java - Copy\student-management-API\src\main\java\com\university\studentapi\StudentManagementApiApplication.java
+C:\Users\Tahir\Desktop\Java - Copy\student-management-API\src\main\java\com\university\studentapi\controller\StudentController.java
+C:\Users\Tahir\Desktop\Java - Copy\student-management-API\src\main\java\com\university\studentapi\service\StudentService.java
+C:\Users\Tahir\Desktop\Java - Copy\student-management-API\src\main\java\com\university\studentapi\dto\StudentRequest.java

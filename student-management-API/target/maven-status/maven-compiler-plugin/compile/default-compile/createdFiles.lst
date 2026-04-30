@@ -1,0 +1,11 @@
+com\university\studentapi\controller\StudentController.class
+com\university\studentapi\exception\ErrorResponse.class
+com\university\studentapi\entity\Student.class
+com\university\studentapi\repository\StudentRepository.class
+com\university\studentapi\exception\GlobalExceptionHandler.class
+com\university\studentapi\exception\DuplicateEmailException.class
+com\university\studentapi\service\StudentService.class
+com\university\studentapi\dto\StudentResponse.class
+com\university\studentapi\exception\StudentNotFoundException.class
+com\university\studentapi\dto\StudentRequest.class
+com\university\studentapi\StudentManagementApiApplication.class
