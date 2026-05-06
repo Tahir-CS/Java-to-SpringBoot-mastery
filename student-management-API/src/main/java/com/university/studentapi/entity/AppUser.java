@@ -22,14 +22,16 @@ public class AppUser {
 
     private String email;
     private String passwordHash;
+    private String role;
 
     public AppUser() {
     }
 
-    public AppUser(Long id, String email, String passwordHash) {
+    public AppUser(Long id, String email, String passwordHash, String role) {
         this.id = id;
         this.email = email;
         this.passwordHash = passwordHash;
+        this.role = role;
     }
 
     public Long getId() {
@@ -54,5 +56,13 @@ public class AppUser {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Lesson 3: JWT Token Generation & Validation.
@@ -33,14 +34,17 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration:86400000}") // 24 hours in ms
     private long expirationMs;
 
-    /**
-     * Generate a JWT token for a user (by email).
-     * Token expires after 24 hours.
-     */
-    public String generateToken(String email) {
+        /**
+         * Generate a JWT token with role claims for RBAC.
+         */
+        public String generateToken(Long userId, String email, String role) {
         SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
 
         return Jwts.builder()
+            .claims(Map.of(
+                "uid", userId,
+                "role", role
+            ))
                 .subject(email) // Who is this token for?
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expirationMs))
@@ -80,6 +84,25 @@ public class JwtTokenProvider {
             return claims.getSubject();
         } catch (Exception ex) {
             return null;
+        }
+    }
+
+    /**
+     * Extract role from token claims for authorization checks.
+     */
+    public String extractRole(String token) {
+        try {
+            SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
+            Claims claims = Jwts.parser()
+                    .verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
+            Object role = claims.get("role");
+            return role == null ? "USER" : role.toString().toUpperCase();
+        } catch (Exception ex) {
+            return "USER";
         }
     }
 }

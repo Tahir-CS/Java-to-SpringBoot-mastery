@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Lesson 3 Iteration 3: JWT Authentication Filter.
@@ -40,10 +41,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = header.substring(7);
             if (jwtTokenProvider.validateToken(token)) {
                 String email = jwtTokenProvider.extractEmail(token);
+                String role = jwtTokenProvider.extractRole(token);
+                List<String> authorities = List.of("ROLE_" + role);
+
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         email,
                         null,
-                        AuthorityUtils.NO_AUTHORITIES
+                        AuthorityUtils.createAuthorityList(authorities.toArray(new String[0]))
                 );
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);

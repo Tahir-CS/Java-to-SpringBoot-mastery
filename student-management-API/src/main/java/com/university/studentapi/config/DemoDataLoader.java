@@ -45,7 +45,21 @@ public class DemoDataLoader implements CommandLineRunner {
         }
 
         if (appUserRepository.count() == 0) {
-            appUserRepository.save(new AppUser(null, "ali@example.com", passwordEncoder.encode("password123")));
+            // USER account for normal access.
+            appUserRepository.save(new AppUser(
+                    null,
+                    "ali@example.com",
+                    passwordEncoder.encode("password123"),
+                    "USER"
+            ));
+
+            // ADMIN account for protected write operations.
+            appUserRepository.save(new AppUser(
+                    null,
+                    "admin@example.com",
+                    passwordEncoder.encode("admin12345"),
+                    "ADMIN"
+            ));
         }
     }
 }
