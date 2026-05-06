@@ -1,11 +1,13 @@
 package com.university.studentapi.controller;
 
 import com.university.studentapi.dto.LoginRequest;
+import com.university.studentapi.entity.AppUser;
+import com.university.studentapi.repository.AppUserRepository;
 import com.university.studentapi.security.JwtTokenProvider;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,15 +34,15 @@ import java.util.Map;
 public class AuthController {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final AppUserRepository appUserRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Value("${app.auth.email}")
-    private String demoEmail;
-
-    @Value("${app.auth.password}")
-    private String demoPassword;
-
-    public AuthController(JwtTokenProvider jwtTokenProvider) {
+    public AuthController(JwtTokenProvider jwtTokenProvider,
+                          AppUserRepository appUserRepository,
+                          PasswordEncoder passwordEncoder) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.appUserRepository = appUserRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -52,15 +54,18 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@Valid @RequestBody LoginRequest loginRequest) {
-        // Demo auth check: only one learning account is accepted in this iteration.
-        if (!demoEmail.equals(loginRequest.email()) || !demoPassword.equals(loginRequest.password())) {
+        // Database-backed auth check: look up the user by email and verify the password hash.
+        AppUser user = appUserRepository.findByEmail(loginRequest.email())
+            .orElse(null);
+
+        if (user == null || !passwordEncoder.matches(loginRequest.password(), user.getPasswordHash())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
                     "error", "Invalid email or password"
             ));
         }
 
         // Generate token (valid for 24 hours).
-        String token = jwtTokenProvider.generateToken(loginRequest.email());
+        String token = jwtTokenProvider.generateToken(user.getEmail());
 
         return ResponseEntity.ok(Map.of(
                 "token", token,
