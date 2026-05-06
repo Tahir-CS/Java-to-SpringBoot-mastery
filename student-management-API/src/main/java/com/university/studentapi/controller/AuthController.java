@@ -3,6 +3,8 @@ package com.university.studentapi.controller;
 import com.university.studentapi.dto.LoginRequest;
 import com.university.studentapi.security.JwtTokenProvider;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +33,12 @@ public class AuthController {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Value("${app.auth.email}")
+    private String demoEmail;
+
+    @Value("${app.auth.password}")
+    private String demoPassword;
+
     public AuthController(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
@@ -44,7 +52,14 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@Valid @RequestBody LoginRequest loginRequest) {
-        // Generate token (valid for 24 hours)
+        // Demo auth check: only one learning account is accepted in this iteration.
+        if (!demoEmail.equals(loginRequest.email()) || !demoPassword.equals(loginRequest.password())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
+                    "error", "Invalid email or password"
+            ));
+        }
+
+        // Generate token (valid for 24 hours).
         String token = jwtTokenProvider.generateToken(loginRequest.email());
 
         return ResponseEntity.ok(Map.of(
