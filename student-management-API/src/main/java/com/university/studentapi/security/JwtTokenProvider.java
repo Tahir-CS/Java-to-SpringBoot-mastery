@@ -55,10 +55,10 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         try {
             SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
-            Jwts.parserBuilder()
-                    .setSigningKey(key)
+            Jwts.parser()
+                    .verifyWith(key)
                     .build()
-                    .parseClaimsJws(token);
+                    .parseSignedClaims(token);
             return true;
         } catch (Exception ex) {
             return false;
@@ -72,10 +72,10 @@ public class JwtTokenProvider {
     public String extractEmail(String token) {
         try {
             SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
+            Claims claims = Jwts.parser()
+                    .verifyWith(key)
                     .build()
-                    .parseClaimsJws(token)
+                    .parseSignedClaims(token)
                     .getPayload();
             return claims.getSubject();
         } catch (Exception ex) {

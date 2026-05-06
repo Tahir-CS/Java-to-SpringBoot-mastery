@@ -2,20 +2,21 @@ package com.university.studentapi.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * Lesson 3: Spring Security Configuration (Iteration 2).
+ * Lesson 3: Spring Security Configuration (Iteration 3).
  *
  * Now we allow /api/auth/login without authentication.
- * All other endpoints will require JWT token in next iteration.
+ * Student endpoints require a valid JWT token.
  *
  * Current flow:
  * - /api/auth/login → PUBLIC (no auth needed, returns token)
- * - /api/students/* → PUBLIC (for now, will be protected in iteration 3)
+ * - /api/students/* → PROTECTED (must send Bearer token)
  */
 @Configuration
 public class SecurityConfig {
@@ -33,15 +34,16 @@ public class SecurityConfig {
      * We're using JWT tokens instead.
      */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider) throws Exception {
         http
-                .csrf().disable() // Disable CSRF (we use tokens, not cookies)
+            .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Login is public
-                        .anyRequest().permitAll() // Allow all other endpoints for now
+                .requestMatchers("/api/auth/**").permitAll()
+                .anyRequest().authenticated()
                 )
-                .httpBasic().disable() // No basic auth
-                .formLogin().disable(); // No form login
+            .httpBasic(httpBasic -> httpBasic.disable())
+            .formLogin(formLogin -> formLogin.disable())
+            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
