@@ -1,27 +1,20 @@
 package com.university.studentapi.dto;
 
-import com.university.studentapi.entity.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 /**
- * LESSON 3: Authentication DTOs
+ * Lesson 3 Iteration 2: Login Request DTO.
  *
- * Used for login and registration endpoints
- */
-
-/**
- * Login Request DTO
- * Sent by client during login
+ * Client sends email + password to login and get a JWT token.
+ * The AuthController uses this to validate input and generate tokens.
  */
 public record LoginRequest(
-        @NotBlank(message = "Username is required")
-        String username,
+        @NotBlank(message = "Email cannot be blank")
+        @Email(message = "Email must be valid")
+        String email,
 
-        @NotBlank(message = "Password is required")
+        @NotBlank(message = "Password cannot be blank")
         String password
 ) {
 }
-
-// File continues below...
