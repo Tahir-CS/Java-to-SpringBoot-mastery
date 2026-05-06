@@ -27,7 +27,7 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    @Value("${jwt.secret:my-secret-key-change-this-in-production}")
+    @Value("${jwt.secret:student-management-api-demo-secret-key-change-this-is-long-enough-for-hs512}")
     private String secretKey;
 
     @Value("${jwt.expiration:86400000}") // 24 hours in ms
