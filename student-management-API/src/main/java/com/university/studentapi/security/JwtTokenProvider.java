@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import com.university.studentapi.security.Role;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -37,13 +38,13 @@ public class JwtTokenProvider {
         /**
          * Generate a JWT token with role claims for RBAC.
          */
-        public String generateToken(Long userId, String email, String role) {
+        public String generateToken(Long userId, String email, Role role) {
         SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
 
         return Jwts.builder()
             .claims(Map.of(
                 "uid", userId,
-                "role", role
+                "role", role.name()
             ))
                 .subject(email) // Who is this token for?
                 .issuedAt(new Date())
@@ -100,9 +101,9 @@ public class JwtTokenProvider {
                     .getPayload();
 
             Object role = claims.get("role");
-            return role == null ? "USER" : role.toString().toUpperCase();
+            return role == null ? Role.USER.name() : role.toString().toUpperCase();
         } catch (Exception ex) {
-            return "USER";
+            return Role.USER.name();
         }
     }
 }

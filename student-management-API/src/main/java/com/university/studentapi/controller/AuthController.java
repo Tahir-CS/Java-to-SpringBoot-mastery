@@ -5,6 +5,7 @@ import com.university.studentapi.dto.RegisterRequest;
 import com.university.studentapi.entity.AppUser;
 import com.university.studentapi.repository.AppUserRepository;
 import com.university.studentapi.security.JwtTokenProvider;
+import com.university.studentapi.security.Role;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,14 +69,14 @@ public class AuthController {
             null,
             registerRequest.email(),
             passwordEncoder.encode(registerRequest.password()),
-            "USER"
+            Role.USER
         ));
 
         String token = jwtTokenProvider.generateToken(saved.getId(), saved.getEmail(), saved.getRole());
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
             "token", token,
             "email", saved.getEmail(),
-            "role", saved.getRole()
+            "role", saved.getRole().name()
         ));
         }
 
@@ -101,7 +102,7 @@ public class AuthController {
         return ResponseEntity.ok(Map.of(
                 "token", token,
             "email", user.getEmail(),
-            "role", user.getRole()
+            "role", user.getRole().name()
         ));
     }
 
@@ -127,7 +128,7 @@ public class AuthController {
         return ResponseEntity.ok(Map.of(
             "id", String.valueOf(user.getId()),
             "email", user.getEmail(),
-            "role", user.getRole()
+            "role", user.getRole().name()
         ));
         }
 }

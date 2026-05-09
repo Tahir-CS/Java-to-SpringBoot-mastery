@@ -4,6 +4,7 @@ import com.university.studentapi.entity.AppUser;
 import com.university.studentapi.entity.Student;
 import com.university.studentapi.repository.AppUserRepository;
 import com.university.studentapi.repository.StudentRepository;
+import com.university.studentapi.security.Role;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -50,7 +51,7 @@ public class DemoDataLoader implements CommandLineRunner {
                     null,
                     "ali@example.com",
                     passwordEncoder.encode("password123"),
-                    "USER"
+                    Role.USER
             ));
 
             // ADMIN account for protected write operations.
@@ -58,7 +59,7 @@ public class DemoDataLoader implements CommandLineRunner {
                     null,
                     "admin@example.com",
                     passwordEncoder.encode("admin12345"),
-                    "ADMIN"
+                    Role.ADMIN
             ));
         }
     }

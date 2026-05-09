@@ -1,9 +1,12 @@
 package com.university.studentapi.entity;
 
+import com.university.studentapi.security.Role;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
 /**
@@ -22,12 +25,14 @@ public class AppUser {
 
     private String email;
     private String passwordHash;
-    private String role;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public AppUser() {
     }
 
-    public AppUser(Long id, String email, String passwordHash, String role) {
+    public AppUser(Long id, String email, String passwordHash, Role role) {
         this.id = id;
         this.email = email;
         this.passwordHash = passwordHash;
@@ -58,11 +63,11 @@ public class AppUser {
         this.passwordHash = passwordHash;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 }
