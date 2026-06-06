@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    # Adjust credentials locally before running.
+    url: jdbc:postgresql://localhost:5432/ledger_db
+    username: postgres
+    password: yourpassword
+
+  jpa:
+    hibernate:
+      # Dev-only convenience; use validate or migrations for real environments.
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8081
