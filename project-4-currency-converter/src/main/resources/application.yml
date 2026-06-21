@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ledger_db
+    username: postgres
+    password: yourpassword
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  
+  # --- Redis config ---
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2000ms
+      
+  # --- Cache config ---
+  cache:
+    type: redis
+
+jwt:
+  secret: bXktc3VwZXItc2VjcmV0LWtleS10aGF0LWlzLWF0LWxlYXN0LTI1Ni1iaXRzLWxvbmctZm9yLWp3dC1zaWduaW5n
+  expiration: 86400000
+
+# --- External API config ---
+exchange-rate:
+  api-key: ${EXCHANGE_RATE_API_KEY:dummy-key-for-now}
+  base-url: https://v6.exchangerate-api.com/v6
+  cache-ttl-minutes: 60
