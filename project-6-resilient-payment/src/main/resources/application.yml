@@ -1,0 +1,47 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ledger_db
+    username: postgres
+    password: yourpassword
+  jpa:
+    hibernate: ddl-auto: update
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      bankApi:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 5
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+        record-exceptions:
+          - com.ledger.exception.BankApiException
+          - java.io.IOException
+          - java.util.concurrent.TimeoutException
+  retry:
+    instances:
+      bankApi:
+        max-attempts: 3
+        wait-duration: 500ms
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+        retry-exceptions:
+          - com.ledger.exception.BankApiException
+          - java.io.IOException
+  timelimiter:
+    instances:
+      bankApi:
+        timeout-duration: 3s
+        cancel-running-future: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,circuitbreakers,retries,metrics
+  health:
+    circuitbreakers:
+      enabled: true
